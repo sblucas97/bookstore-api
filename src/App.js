@@ -6,17 +6,19 @@ import Helmet from 'react-helmet'
 // import createHistory from 'history/createBrowserHistory'
 // import store from './redux/store'
 
-import Loader from 'components/Loader'
+// import Loader from 'components/Loader'
 
-import { useUser } from 'context/user-context'
+// import { useUser } from 'context/user-context'
 
 import Theme from 'theme'
 
 import 'sanitize.css/sanitize.css'
 
-const loadAuthenticatedApp = () => import('./AuthenticatedApp')
-const AuthenticatedApp = lazy(loadAuthenticatedApp)
-const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'))
+// const loadAuthenticatedApp = () => import('./AuthenticatedApp')
+// const AuthenticatedApp = lazy(loadAuthenticatedApp)
+// const UnauthenticatedApp = lazy(() => import('./UnauthenticatedApp'))
+
+import AuthenticatedApp from './AuthenticatedApp.js'
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -36,20 +38,23 @@ button, a {
 `
 
 const App = () => {
-  const { user } = useUser()
+  // const { user } = useUser()
 
-  useEffect(() => {
-    loadAuthenticatedApp()
-  }, [])
+  // useEffect(() => {
+  //   loadAuthenticatedApp()
+  // }, [])
 
   return (
     // <Provider store={store}>
     <Theme>
       <Helmet titleTemplate='Nave.rs | %s' />
       <GlobalStyle />
-      <Suspense fallback={<Loader />}>
-        <Router>{user ? <AuthenticatedApp /> : <UnauthenticatedApp />}</Router>
-      </Suspense>
+      {/* <Suspense fallback={<Loader />}> */}
+      {/* <Router>{user ? <AuthenticatedApp /> : <UnauthenticatedApp />}</Router> */}
+      <Router>
+        <AuthenticatedApp />
+      </Router>
+      {/* </Suspense> */}
     </Theme>
     // </Provider>
   )

@@ -11,18 +11,20 @@ import AppProviders from 'context'
 
 import { version, name } from '../package.json'
 
-if (process.env.REACT_APP_NODE_ENV === 'production') {
-  Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_URL,
-    environment: process.env.REACT_APP_NODE_ENV,
-    debug: process.env.REACT_APP_NODE_ENV !== 'prodution',
-    release: `${name}@${version}`
-  })
-}
+// if (process.env.REACT_APP_NODE_ENV === 'production') {
+//   Sentry.init({
+//     dsn: process.env.REACT_APP_SENTRY_URL,
+//     environment: process.env.REACT_APP_NODE_ENV,
+//     debug: process.env.REACT_APP_NODE_ENV !== 'prodution',
+//     release: `${name}@${version}`
+//   })
+// }
 
 ReactDOM.render(
-  <AppProviders>
+  <React.StrictMode>
+    {/* // <AppProviders> */}
     <App />
-  </AppProviders>,
+    {/* // </AppProviders>, */}
+  </React.StrictMode>,
   document.getElementById('root')
 )
