@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 
 import Row from 'components/Row'
 import Column from 'components/Column'
@@ -13,6 +13,8 @@ const Home = () => {
   const handleDeleteBook = async id => {
     try {
       await deleteBook(id)
+      const { data } = await getBooks()
+      setBooks(data)
     } catch (e) {
       console.log(e)
     }
@@ -21,10 +23,7 @@ const Home = () => {
   useEffect(() => {
     const handleGetBooks = async () => {
       try {
-        const {
-          data: { data }
-        } = await getBooks()
-
+        const { data } = await getBooks()
         setBooks(data)
       } catch (e) {
         console.log(e)
@@ -34,14 +33,13 @@ const Home = () => {
     handleGetBooks()
   }, [])
 
-  if (books.length === 0) return <div>carregando</div>
-
   return (
     <Row width={1} alignItems='center' justifyContent='center'>
       <Column>
-        {books.map(item => (
-          <div>
+        {books?.map(item => (
+          <div key={item.id}>
             {item.title} <button onClick={() => handleDeleteBook(item.id)}>X</button>
+            <button onClick={() => history.push('/create-book', item)}>EDIT</button>
           </div>
         ))}
         <button onClick={() => history.push('/create-book')}>criar livro</button>

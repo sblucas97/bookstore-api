@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
@@ -8,7 +8,7 @@ import Column from 'components/Column'
 import Input from 'components/Input'
 import Button from 'components/Button'
 
-import { createBook } from 'services/books'
+import { createBook, updateBook } from 'services/books'
 
 const schema = Yup.object().shape({
   title: Yup.string().required(),
@@ -18,25 +18,30 @@ const schema = Yup.object().shape({
 
 const CreateBook = () => {
   const history = useHistory()
-  const { register, handleSubmit, errors, setValue } = useForm({
+  const [book] = useState(history.location.state)
+
+  const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
     defaultValues: {
-      // title: 'Title defaultvalue'
+      title: book?.title,
+      author: book?.author,
+      copies: book?.copies
     }
   })
+
   const onSubmit = async values => {
     try {
-      const response = await createBook(values)
+      if (book) {
+        await updateBook(book.id, values)
+      } else {
+        await createBook(values)
+      }
       history.push('/home')
     } catch (e) {
       console.log(e)
     }
   }
 
-  // useEffect(() => {
-  //   //TODO: useHistory pegar os parametros
-  //   // se existe id, fazer request pra API
-  // }, [])
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Row width={1} justifyContent='center' mt={50}>
@@ -52,7 +57,7 @@ const CreateBook = () => {
             error={errors.copies?.message}
           />
           <Button type='submit' backgroundColor='#34128a' color='#fff'>
-            Criar livro
+            {book ? 'Editar livro' : 'Criar livro'}
           </Button>
         </Column>
       </Row>
